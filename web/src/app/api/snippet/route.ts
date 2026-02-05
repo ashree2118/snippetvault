@@ -2,53 +2,58 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import OpenAI from 'openai';
 
-// Initialize OpenAI (Make sure you have your key in .env!)
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req: Request) {
   try {
-    // 1. Get data from the Chrome Extension
     const body = await req.json();
     const { code, sourceUrl } = body;
 
-    console.log("🔹 Received Snippet:", code.substring(0, 20) + "...");
+    console.log("🔹 API Received Code:", code.substring(0, 20) + "...");
 
-    // 2. Ask OpenAI to analyze it
-    // (If you don't have a Key yet, we can mock this part)
-    const completion = await openai.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content: "You are a code archivist. Analyze the code snippet. Return a JSON object with these keys: 'title' (short name), 'language' (e.g. typescript), 'explanation' (1 sentence summary), and 'tags' (array of 3 strings)."
-        },
-        { role: "user", content: code },
-      ],
-      model: "gpt-3.5-turbo",
-      response_format: { type: "json_object" },
-    });
+    let aiData = {
+      title: "Untitled Snippet",
+      language: "text",
+      explanation: "AI processing skipped (No Key)",
+      tags: ["pending"]
+    };
 
-    const aiData = JSON.parse(completion.choices[0].message.content || "{}");
+    // ONLY call OpenAI if the Key exists in .env
+    if (process.env.OPENAI_API_KEY) {
+      try {
+        const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+        const completion = await openai.chat.completions.create({
+          messages: [
+            {
+              role: "system",
+              content: "Analyze this code. Return JSON with: title, language, explanation (1 sentence), tags (array of 3)."
+            },
+            { role: "user", content: code },
+          ],
+          model: "gpt-3.5-turbo",
+          response_format: { type: "json_object" },
+        });
+        aiData = JSON.parse(completion.choices[0].message.content || "{}");
+      } catch (e) {
+        console.error("⚠️ OpenAI Error (Skipping):", e);
+      }
+    }
 
-    // 3. Save to Database
-    const savedSnippet = await prisma.snippet.create({
+    // Save to Database
+    const snippet = await prisma.snippet.create({
       data: {
         code: code,
         sourceUrl: sourceUrl,
-        title: aiData.title || "Untitled Snippet",
-        language: aiData.language || "text",
-        explanation: aiData.explanation || "No explanation",
-        tags: aiData.tags || [],
+        title: aiData.title,
+        language: aiData.language,
+        explanation: aiData.explanation,
+        tags: aiData.tags,
       },
     });
 
-    console.log("✅ Saved to DB with ID:", savedSnippet.id);
-    
-    return NextResponse.json({ success: true, data: savedSnippet });
+    console.log("✅ Saved to DB:", snippet.id);
+    return NextResponse.json({ success: true, snippet });
 
   } catch (error) {
-    console.error("❌ Error saving snippet:", error);
-    return NextResponse.json({ success: false, error: 'Failed to save' }, { status: 500 });
+    console.error("❌ API Error:", error);
+    return NextResponse.json({ success: false }, { status: 500 });
   }
 }
