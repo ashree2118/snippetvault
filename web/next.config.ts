@@ -1,3 +1,4 @@
+// Forcing a Vercel cache clear
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
