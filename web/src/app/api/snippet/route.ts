@@ -1,47 +1,64 @@
-import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import OpenAI from 'openai';
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { GoogleGenAI } from "@google/genai";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { code, sourceUrl } = body;
+    const { code, sourceUrl } = await req.json();
 
-    console.log("🔹 API Received Code:", code.substring(0, 20) + "...");
+    if (typeof code !== "string" || !code.trim()) {
+      return NextResponse.json(
+        { success: false, error: "Code is required" },
+        { status: 400 }
+      );
+    }
 
     let aiData = {
       title: "Untitled Snippet",
       language: "text",
-      explanation: "AI processing skipped (No Key)",
-      tags: ["pending"]
+      explanation: "AI processing skipped.",
+      tags: ["pending"],
     };
 
-    // ONLY call OpenAI if the Key exists in .env
-    if (process.env.OPENAI_API_KEY) {
+    if (process.env.GEMINI_API_KEY) {
       try {
-        const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-        const completion = await openai.chat.completions.create({
-          messages: [
-            {
-              role: "system",
-              content: "Analyze this code. Return JSON with: title, language, explanation (1 sentence), tags (array of 3)."
-            },
-            { role: "user", content: code },
-          ],
-          model: "gpt-3.5-turbo",
-          response_format: { type: "json_object" },
+        const ai = new GoogleGenAI({
+          apiKey: process.env.GEMINI_API_KEY,
         });
-        aiData = JSON.parse(completion.choices[0].message.content || "{}");
-      } catch (e) {
-        console.error("⚠️ OpenAI Error (Skipping):", e);
+
+        const prompt = `
+            Return ONLY valid JSON:
+            {
+            "title": "short title",
+            "language": "programming language",
+            "explanation": "one sentence explanation",
+            "tags": ["tag1", "tag2", "tag3"]
+            }
+
+        Code:
+        ${code}
+        `.trim();
+
+        const response = await ai.models.generateContent({
+          model: "gemini-3-flash-preview",
+          contents: prompt,
+        });
+
+        if (!response.text) {
+            throw new Error("Gemini returned no text");
+        }
+        aiData = JSON.parse(response.text);
+        console.log("⚡ Gemini Success:", aiData.title);
+
+      } catch (err) {
+        console.error("❌ Gemini failed:", err);
       }
     }
 
-    // Save to Database
     const snippet = await prisma.snippet.create({
       data: {
-        code: code,
-        sourceUrl: sourceUrl,
+        code,
+        sourceUrl,
         title: aiData.title,
         language: aiData.language,
         explanation: aiData.explanation,
@@ -49,11 +66,13 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log("✅ Saved to DB:", snippet.id);
     return NextResponse.json({ success: true, snippet });
 
   } catch (error) {
     console.error("❌ API Error:", error);
-    return NextResponse.json({ success: false }, { status: 500 });
+    return NextResponse.json(
+      { success: false },
+      { status: 500 }
+    );
   }
 }

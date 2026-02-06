@@ -9,10 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/genai": "^1.40.0",
+    "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^6.19.2",
     "ioredis": "^5.9.2",
     "next": "16.1.6",
-    "openai": "^6.17.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "zustand": "^5.0.11"
