@@ -1,14 +1,21 @@
 {
   "manifest_version": 3,
-  "name": "SnippetVault",
+  "name": "Snippet",
   "version": "1.0",
-  "description": "Save code snippets to your personal vault with one click.",
-  "permissions": ["contextMenus", "activeTab"],
-  "host_permissions": ["http://localhost:3000/*"],
+  "description": "Save code snippets to your external brain.",
+  "permissions": [
+    "contextMenus", 
+    "activeTab", 
+    "scripting",
+    "storage" 
+  ],
+  "host_permissions": [
+    "http://localhost:3000/*" 
+  ],
   "background": {
     "service_worker": "background.js"
   },
-  "action": {
+    "action": {
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
