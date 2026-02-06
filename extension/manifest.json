@@ -10,7 +10,7 @@
     "storage" 
   ],
   "host_permissions": [
-    "http://localhost:3000/*" 
+    "https://snippet-two-rust.vercel.app/*" 
   ],
   "background": {
     "service_worker": "background.js"
