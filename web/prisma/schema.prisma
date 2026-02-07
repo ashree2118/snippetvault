@@ -16,6 +16,8 @@ model Snippet {
   tags        String[]
   sourceUrl   String?
   createdAt   DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -28,6 +30,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  snippets      Snippet[]
 }
 
 model Session {

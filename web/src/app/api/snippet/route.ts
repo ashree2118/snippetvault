@@ -1,9 +1,21 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI } from "@google/genai"; 
+import { auth } from "@/lib/auth"; 
+import { headers } from "next/headers";
 
 export async function POST(req: Request) {
   try {
+    // 1. Get the current user 
+    const session = await auth.api.getSession({
+      headers: await headers()
+    });
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // 2. Read the request body
     const { code, sourceUrl } = await req.json();
 
     if (typeof code !== "string" || !code.trim()) {
@@ -13,58 +25,66 @@ export async function POST(req: Request) {
       );
     }
 
+    // 3. Default AI Data (Fallback)
     let aiData = {
       title: "Untitled Snippet",
       language: "text",
-      explanation: "AI processing skipped.",
+      formattedContent: code, 
       tags: ["pending"],
     };
 
+    // 4. Call Gemini
     if (process.env.GEMINI_API_KEY) {
       try {
-        const ai = new GoogleGenAI({
-          apiKey: process.env.GEMINI_API_KEY,
-        });
-
+        const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+        
         const prompt = `
-  Analyze this code snippet or text:
-  "${body.code}"
+          Analyze this code snippet or text:
+          "${code}"
 
-  1. Generate a short title (max 5 words).
-  2. Generate 3 relevant tags.
-  3. Detect the primary language.
-  4. FORMAT THE CONTENT: If the input is mixed text and code, reformat it into valid Markdown. 
-     - Use standard text for explanations.
-     - Use \`\`\`language blocks for code.
-     - Fix indentation if broken.
-  
-  Return JSON: { "title": "...", "tags": ["..."], "language": "...", "formattedContent": "..." }
-`;
+          1. Generate a short title (max 5 words).
+          2. Generate 3 relevant tags.
+          3. Detect the primary language.
+          4. FORMAT THE CONTENT: If the input is mixed text and code, reformat it into valid Markdown. 
+             - Use standard text for explanations.
+             - Use \`\`\`language blocks for code.
+             - Fix indentation if broken.
+          
+          Return JSON: { "title": "...", "tags": ["..."], "language": "...", "formattedContent": "..." }
+        `;
 
-        const response = await ai.models.generateContent({
-          model: "gemini-3-flash-preview",
-          contents: prompt,
+        const response = await genAI.models.generateContent({
+          model: "gemini-2.0-flash",
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: prompt }]
+            }
+          ],
+          config: {
+            responseMimeType: "application/json", 
+          }
         });
 
-        if (!response.text) {
-            throw new Error("Gemini returned no text");
+        if (response.text) {
+           aiData = JSON.parse(response.text);
+           console.log("⚡ Gemini Success:", aiData.title);
         }
-        aiData = JSON.parse(response.text);
-        console.log("⚡ Gemini Success:", aiData.title);
 
       } catch (err) {
         console.error("❌ Gemini failed:", err);
       }
     }
 
+    // 5. Save to Database
     const snippet = await prisma.snippet.create({
       data: {
-        code,
-        sourceUrl,
-        title: aiData.title,
-        language: aiData.language,
-        explanation: aiData.explanation,
-        tags: aiData.tags,
+        userId: session.user.id, // Connect to the logged-in user
+        title: aiData.title || "Untitled",
+        code: aiData.formattedContent || code,
+        language: aiData.language || "text",
+        tags: aiData.tags || [],
+        sourceUrl: sourceUrl || "",
       },
     });
 
@@ -73,7 +93,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("❌ API Error:", error);
     return NextResponse.json(
-      { success: false },
+      { success: false, error: "Internal Server Error" },
       { status: 500 }
     );
   }
