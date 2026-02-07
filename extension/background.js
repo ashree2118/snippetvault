@@ -2,7 +2,7 @@
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "save-snippet",
-    title: "Save to SnippetVault",
+    title: "Save to Snippet",
     contexts: ["selection"] 
   });
 });

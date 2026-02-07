@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Snippet",
-  description: "A personal library for code you discover on the web. SnippetVault captures code at the moment you find it and stores it in a clean, searchable dashboard built specifically for developers.",
+  description: "A personal library for code-solutions you discover on the web. Snippet captures solution-code at the moment you find it and stores it in a clean, searchable dashboard built specifically for developers. It’s not a notes app. It’s not bookmarks. It’s not another snippet manager you forget to open. It works where discovery happens - your browser.",
 };
 
 export default function RootLayout({

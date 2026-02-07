@@ -14,7 +14,7 @@ export default function Dashboard({ initialSnippets }: { initialSnippets: any[] 
         {/* HEADER SECTION (Handles Auth) */}
         <header className="flex justify-between items-center mb-10 border-b border-gray-800 pb-5">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-            SnippetVault
+            Snippet
           </h1>
 
           <div>
