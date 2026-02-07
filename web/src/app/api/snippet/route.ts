@@ -27,17 +27,19 @@ export async function POST(req: Request) {
         });
 
         const prompt = `
-            Return ONLY valid JSON:
-            {
-            "title": "short title",
-            "language": "programming language",
-            "explanation": "one sentence explanation",
-            "tags": ["tag1", "tag2", "tag3"]
-            }
+  Analyze this code snippet or text:
+  "${body.code}"
 
-        Code:
-        ${code}
-        `.trim();
+  1. Generate a short title (max 5 words).
+  2. Generate 3 relevant tags.
+  3. Detect the primary language.
+  4. FORMAT THE CONTENT: If the input is mixed text and code, reformat it into valid Markdown. 
+     - Use standard text for explanations.
+     - Use \`\`\`language blocks for code.
+     - Fix indentation if broken.
+  
+  Return JSON: { "title": "...", "tags": ["..."], "language": "...", "formattedContent": "..." }
+`;
 
         const response = await ai.models.generateContent({
           model: "gemini-3-flash-preview",
