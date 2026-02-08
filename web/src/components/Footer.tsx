@@ -11,8 +11,14 @@ export const Footer = () => {
           © {new Date().getFullYear()} Snippet. All rights reserved.
         </p>
 
-        {/* Social links */}
+        {/* Links */}
         <div className="flex items-center gap-4">
+          <Link
+            href="/privacy"
+            className="text-xs text-[#15B19A] hover:text-[#aaa] transition-colors"
+          >
+            Privacy
+          </Link>
           <Link
             href="https://github.com/ashree2118/snippetvault"
             target="_blank"
