@@ -16,7 +16,7 @@ export const Footer = () => {
           <Link
             href="https://github.com/ashree2118/snippetvault"
             target="_blank"
-            className="inline-flex items-center gap-1 text-xs text-[#666] hover:text-[#aaa] transition-colors"
+            className="inline-flex items-center gap-1 text-xs text-[#15B19A] hover:text-[#aaa] transition-colors"
           >
             <Github size={14} />
             GitHub
@@ -25,7 +25,7 @@ export const Footer = () => {
           <Link
             href="https://x.com/anushree210"
             target="_blank"
-            className="inline-flex items-center gap-1 text-xs text-[#666] hover:text-[#aaa] transition-colors"
+            className="inline-flex items-center gap-1 text-xs text-[#15B19A] hover:text-[#aaa] transition-colors"
           >
             <Twitter size={14} />
             X

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Snippet",
-  description: "Save code, articles, and error solutions from the web. Snippet uses AI to automatically add clear titles and tags, so everything stays searchable.",
+  description: "Save code, articles, and error solutions from the web. Snippet uses AI to add clear titles and tags, making everything easy to find later.",
 };
 
 export default function RootLayout({
