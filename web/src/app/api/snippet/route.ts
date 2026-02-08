@@ -4,6 +4,44 @@ import { GoogleGenAI } from "@google/genai";
 import { auth } from "@/lib/auth"; 
 import { headers } from "next/headers";
 
+export async function GET() {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers()
+    });
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const snippet = await prisma.snippet.findFirst({
+      where: { userId: session.user.id },
+      orderBy: { createdAt: "desc" },
+    });
+
+    if (!snippet) {
+      return NextResponse.json({ snippet: null });
+    }
+
+    return NextResponse.json({
+      snippet: {
+        id: snippet.id,
+        title: snippet.title,
+        code: snippet.code,
+        language: snippet.language,
+        sourceUrl: snippet.sourceUrl,
+        createdAt: snippet.createdAt,
+      },
+    });
+  } catch (error) {
+    console.error("❌ API Error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(req: Request) {
   try {
     // 1. Get the current user 

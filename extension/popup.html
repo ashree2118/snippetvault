@@ -64,7 +64,7 @@
     }
 
     .empty-state {
-      text-align: center;
+      text-align: left;
       color: var(--text);
       font-size: 16px;
       line-height: 1.5;
@@ -79,6 +79,51 @@
       margin-top: 8px;
       font-size: 14px;
       color: #666;
+    }
+
+    .recent-snippet {
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--panel);
+      padding: 12px;
+      display: none;
+    }
+
+    .recent-snippet.visible {
+      display: block;
+    }
+
+    .recent-snippet h3 {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0 0 8px 0;
+      font-weight: 600;
+    }
+
+    .recent-snippet .snippet-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 8px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .recent-snippet .snippet-preview {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: ui-monospace, monospace;
+      max-height: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin: 0;
+      line-height: 1.4;
     }
 
     .footer {
@@ -115,10 +160,14 @@
     <div class="content" id="content">
       <div class="empty-state">
         <p>Ready to capture</p>
-        <p>1. Highlight text</p>
-        <p>2. Right click</p>
-        <p>3. Save to Snippet!</p>
+        <p>Highlight text -> Right click -> Save to Snippet!</p>
       </div>
+    </div>
+
+    <div class="recent-snippet" id="recent-snippet">
+      <h3>Latest from dashboard</h3>
+      <p class="snippet-title" id="recent-snippet-title">—</p>
+      <pre class="snippet-preview" id="recent-snippet-preview"></pre>
     </div>
 
     <div class="footer">
