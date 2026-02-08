@@ -81,7 +81,7 @@ export async function POST(req: Request) {
           "${code}"
 
           1. Generate a short title (max 5 words).
-          2. Generate 3 relevant tags.
+          2. Generate 5-9 relevant tags.
           3. Detect the primary language.
           4. FORMAT THE CONTENT: If the input is mixed text and code, reformat it into valid Markdown. 
              - Use standard text for explanations.
