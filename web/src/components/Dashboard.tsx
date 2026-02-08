@@ -8,7 +8,7 @@ export default function Dashboard({ initialSnippets }: { initialSnippets: any[] 
   const { data: session, isPending } = useSession();
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-[#e0e0e0] font-sans">
+    <div className="min-h-screen bg-[#000000] text-[#e0e0e0] font-sans">
       <div className="max-w-[680px] mx-auto px-5 py-8">
         
         {/* HEADER */}

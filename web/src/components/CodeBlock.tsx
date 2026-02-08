@@ -1,22 +1,29 @@
 'use client';
 
-import { useState } from 'react';
-import { Check, Copy, Maximize2, Minimize2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Check, Copy } from 'lucide-react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 interface CodeBlockProps {
   code: string;
   language: string;
+  /** When true, code block shows full height (no max-height). Controlled by snippet card expand. */
+  expanded?: boolean;
 }
 
-export default function CodeBlock({ code, language }: CodeBlockProps) {
+export default function CodeBlock({ code, language, expanded = false }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [isMounted, setIsMounted] = useState(false); // To prevent SSR issues with SyntaxHighlighter
 
   // Strip markdown code fences (```lang ... ```) if present
   const cleanCode = code
     .replace(/^```[\w#\+]*\s*\n?/gm, '')
     .replace(/```\s*$/gm, '')
     .trim();
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(cleanCode);
@@ -25,18 +32,9 @@ export default function CodeBlock({ code, language }: CodeBlockProps) {
   };
 
   return (
-    <div className="relative rounded-xl overflow-hidden bg-[#111111] border border-[#1c1c1c]">
-      {/* Top-right actions: expand pill + copy icon */}
+    <div className="relative rounded-xl overflow-hidden bg-[#070707] border border-[#1c1c1c]">
+      {/* Top-right: copy icon only */}
       <div className="absolute top-3 right-3 z-10 flex items-center gap-2.5">
-        {/* Expand pill button */}
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-1.5 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-1.5 text-[11px] text-[#666] hover:text-[#999] hover:border-[#3a3a3a] transition-colors"
-        >
-          <span className="font-sans">{expanded ? 'collapse' : 'expand'}</span>
-          {expanded ? <Minimize2 size={11} /> : <Maximize2 size={11} />}
-        </button>
-        {/* Copy button */}
         <button
           onClick={handleCopy}
           className="text-[#555] hover:text-[#999] transition-colors p-1"
@@ -46,15 +44,34 @@ export default function CodeBlock({ code, language }: CodeBlockProps) {
         </button>
       </div>
 
-      {/* Plain code - no syntax highlighting, clean monospace */}
+      {/* --- The Syntax Highlighter --- */}
       <div className={`overflow-auto custom-scrollbar ${expanded ? '' : 'max-h-[160px]'}`}>
-        <pre
-          className="font-mono text-[11.5px] leading-[1.8] text-[#c8c8c8] whitespace-pre-wrap break-words"
-          style={{ margin: 0, padding: '20px 50px 20px 20px' }}
-        >
-          {cleanCode}
-        </pre>
-      </div>
+        {isMounted ? (
+          <SyntaxHighlighter
+            language={language?.toLowerCase() || 'text'}
+            style={vscDarkPlus}
+            // We inject your exact UI styles here:
+            customStyle={{
+              margin: 0,
+              padding: '20px 50px 20px 20px', // Your padding
+              background: 'transparent',      // Use parent bg
+              fontSize: '11.5px',             // Your font size
+              lineHeight: '1.8',              // Your line height
+            }}
+            wrapLongLines={true}
+          >
+            {cleanCode}
+          </SyntaxHighlighter>
+        ) : (
+          // Fallback to plain text while loading (prevents flickering)
+          <pre 
+            className="font-mono text-[11.5px] leading-[1.8] text-[#c8c8c8] whitespace-pre-wrap break-words"
+            style={{ margin: 0, padding: '20px 50px 20px 20px' }}
+          >
+            {cleanCode}
+          </pre>
+        )}
+        </div>
     </div>
   );
 }

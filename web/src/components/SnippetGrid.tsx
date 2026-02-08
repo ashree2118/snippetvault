@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSnippetStore } from '@/store/useSnippetStore';
 import CodeBlock from './CodeBlock';
 import { Search } from 'lucide-react';
+import { Check, Copy, Maximize2, Minimize2 } from 'lucide-react';
 
 export default function SnippetGrid({ initialData }: { initialData: any[] }) {
   const { setSnippets, setSearchQuery, filteredSnippets } = useSnippetStore();
@@ -51,10 +52,19 @@ function SnippetCard({ snippet }: { snippet: any }) {
 
   return (
     <div className="rounded-2xl p-6 border border-[#1a1a1a]">
-      {/* Title */}
-      <h2 className="text-[15px] font-bold text-white mb-2 leading-snug tracking-[-0.01em]">
-        {snippet.title || "Title of the code snippet"}
-      </h2>
+      {/* Title row: title left, expand button right */}
+      <div className="flex items-start justify-between gap-3 mb-2">
+        <h2 className="text-[15px] font-bold text-white leading-snug tracking-[-0.01em] flex-1 min-w-0">
+          {snippet.title || "Title of the code snippet"}
+        </h2>
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="flex items-center gap-1.5 bg-[#1a1a1a] rounded-lg px-3 py-1.5 text-[11px] text-[#666] hover:text-[#999] hover:border-[#3a3a3a] transition-colors shrink-0"
+        >
+          <span className="font-sans">{expanded ? 'collapse' : 'expand'}</span>
+          {expanded ? <Minimize2 size={11} /> : <Maximize2 size={11} />}
+        </button>
+      </div>
 
       {/* Description */}
       <p className="text-[12.5px] text-[#777] leading-[1.7] mb-4">
@@ -83,11 +93,12 @@ function SnippetCard({ snippet }: { snippet: any }) {
         )}
       </p>
 
-      {/* Code Block */}
+      {/* Code Block - expanded state from card controls full code height */}
       <div className="rounded-xl overflow-hidden">
         <CodeBlock 
           code={snippet.code} 
-          language={snippet.language?.toLowerCase() || 'text'} 
+          language={snippet.language?.toLowerCase() || 'text'}
+          expanded={expanded}
         />
       </div>
     </div>
