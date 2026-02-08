@@ -9,12 +9,12 @@ export default function Dashboard({ initialSnippets }: { initialSnippets: any[] 
 
   return (
     <div className="min-h-screen bg-[#000000] text-[#e0e0e0] font-sans flex overflow-x-auto">
-      {/* Left slanted lines */}
-      <div className="slanted-lines" aria-hidden />
+      {/* Left slanted lines - hidden on mobile */}
+      <div className="slanted-lines hidden md:block" aria-hidden />
       {/* Main content */}
-      <div className=" w-full border-l border-r border-[rgba(255,255,255,0.12)]">
+      <div className="w-full border-l border-r border-[rgba(255,255,255,0.12)] min-w-0">
       <div className="flex-1 min-w-0 flex justify-center">
-        <div className="max-w-[680px] w-full px-5 py-8">
+        <div className="max-w-[680px] w-full px-4 py-6 sm:px-5 sm:py-8">
         
         {/* HEADER */}
         <header className="flex justify-between items-center mb-7">
@@ -64,8 +64,8 @@ export default function Dashboard({ initialSnippets }: { initialSnippets: any[] 
 
         </div>
       </div></div>
-      {/* Right slanted lines */}
-      <div className="slanted-lines" aria-hidden />
+      {/* Right slanted lines - hidden on mobile */}
+      <div className="slanted-lines hidden md:block" aria-hidden />
     </div>
     
   );
