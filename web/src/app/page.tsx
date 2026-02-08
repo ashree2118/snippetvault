@@ -1,14 +1,21 @@
 import { prisma } from '@/lib/prisma';
-import Dashboard from '@/components/Dashboard'; // Import your new Client Component
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+import Dashboard from '@/components/Dashboard';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  // 1. Run Server-Side Logic (Database)
-  const snippets = await prisma.snippet.findMany({
-    orderBy: { createdAt: 'desc' },
+  const session = await auth.api.getSession({
+    headers: await headers(),
   });
 
-  // 2. Pass data to Client Component
+  const snippets = session
+    ? await prisma.snippet.findMany({
+        where: { userId: session.user.id },
+        orderBy: { createdAt: 'desc' },
+      })
+    : [];
+
   return <Dashboard initialSnippets={snippets} />;
 }

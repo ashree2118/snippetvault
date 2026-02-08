@@ -60,9 +60,20 @@ export default function Dashboard({ initialSnippets }: { initialSnippets: any[] 
           </div>
         </header>
 
-        {/* DATA GRID */}
-        <SnippetGrid initialData={initialSnippets} />
-        <Footer/>
+        {/* DATA GRID - only show snippets when signed in */}
+        {isPending ? (
+          <div className="py-12 text-center text-[#666] text-sm">Loading…</div>
+        ) : session ? (
+          <>
+            <SnippetGrid initialData={initialSnippets} />
+            <Footer/>
+          </>
+        ) : (
+          <div className="py-12 text-center">
+            <p className="text-[#888] text-[15px] mb-2">Sign in to view and manage your saved snippets.</p>
+            <p className="text-[#666] text-[13px]">Use the button above to sign in with Google.</p>
+          </div>
+        )}
 
         </div>
       </div></div>

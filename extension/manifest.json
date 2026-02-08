@@ -10,7 +10,7 @@
     "storage" 
   ],
   "host_permissions": [
-    "https://snippet-two-rust.vercel.app/*" 
+    "https://saveto-snippet.vercel.app/*" 
   ],
   "background": {
     "service_worker": "background.js"

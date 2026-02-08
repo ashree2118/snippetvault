@@ -18,7 +18,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 
     try {
       // 3. Send to your Next.js Backend
-        const response = await fetch('https://snippet-two-rust.vercel.app/api/snippet', {
+        const response = await fetch('https://saveto-snippet.vercel.app/api/snippet', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

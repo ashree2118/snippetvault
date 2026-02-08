@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 1. Check if the server is alive
     try {
-        const response = await fetch('https://snippet-two-rust.vercel.app/api/auth/get-session', {
+        const response = await fetch('https://saveto-snippet.vercel.app/api/auth/get-session', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         recentBlock.classList.add('visible', 'loading');
     }
     try {
-        const res = await fetch('https://snippet-two-rust.vercel.app/api/snippet', {
+        const res = await fetch('https://saveto-snippet.vercel.app/api/snippet', {
             method: 'GET',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' }
