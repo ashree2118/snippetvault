@@ -2,75 +2,106 @@
 <html>
 <head>
   <style>
+    :root {
+      --bg: #000000;
+      --panel: #0a0a0a;
+      --border: #1e1e1e;
+      --text: #e0e0e0;
+      --muted: #888888;
+      --accent: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       width: 300px;
       height: 400px;
       margin: 0;
-      background-color: #000;
-      color: white;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      letter-spacing: -0.01em;
       overflow: hidden;
     }
+
     .container {
-      padding: 16px;
+      height: 100%;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      padding: 14px;
     }
+
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid #333;
-      padding-bottom: 12px;
-      margin-bottom: 12px;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border);
     }
+
     h1 {
-      font-size: 18px;
+      font-size: 16px;
       margin: 0;
-      background: linear-gradient(to right, #60a5fa, #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: bold;
+      font-weight: 600;
+      color: #e8e8e8;
     }
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background-color: #22c55e;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #22c55e;
+
+    .status {
+      font-size: 11px;
+      color: var(--muted);
     }
+
     .content {
       flex: 1;
       overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--panel);
+      padding: 14px;
     }
+
     .empty-state {
       text-align: center;
-      color: #666;
-      font-size: 13px;
-      margin-top: 60px;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.5;
+      margin-top: 40px;
     }
+
+    .empty-state p {
+      margin: 0;
+    }
+
+    .empty-state p + p {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .footer {
+      margin-top: 12px;
+    }
+
     .btn {
       display: block;
       width: 100%;
-      background: #333;
-      color: white;
-      border: none;
       padding: 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
+      font-size: 12px;
       text-align: center;
+      border-radius: 8px;
+      border: 1px solid #2a2a2a;
+      background: #0f0f0f;
+      color: #ccc;
       text-decoration: none;
-      margin-top: auto;
-      transition: background 0.2s;
+      transition: border 0.2s, color 0.2s;
     }
+
     .btn:hover {
-      background: #444;
-    }
-    .btn-primary {
-      background: linear-gradient(to right, #2563eb, #7c3aed);
-      margin-bottom: 8px;
+      border-color: #444;
+      color: #fff;
     }
   </style>
 </head>
@@ -78,22 +109,29 @@
   <div class="container">
     <header>
       <h1>Snippet</h1>
-      <div class="status-dot" title="System Online"></div>
+      <span class="status">Online</span>
     </header>
-    
+
     <div class="content" id="content">
       <div class="empty-state">
-        <p>Ready to capture.</p>
-        <p style="font-size: 11px; margin-top: 8px;">Highlight text -> Right Click -> Save to Snippet</p>
+        <p>Ready to capture</p>
+        <p>1. Highlight text</p>
+        <p>2. Right click</p>
+        <p>3. Save to Snippet!</p>
       </div>
     </div>
 
-    <div style="margin-top: auto;">
-      <a href="https://snippet-two-rust.vercel.app" target="_blank" class="btn btn-primary">
+    <div class="footer">
+      <a
+        href="https://snippet-two-rust.vercel.app"
+        target="_blank"
+        class="btn"
+      >
         Open Dashboard
       </a>
     </div>
   </div>
+
   <script src="popup.js"></script>
 </body>
 </html>
