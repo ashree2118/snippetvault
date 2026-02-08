@@ -9,6 +9,7 @@
       --text: #e0e0e0;
       --muted: #888888;
       --accent: #ffffff;
+      --primary: #15B19A;
     }
 
     * {
@@ -51,12 +52,11 @@
 
     .status {
       font-size: 11px;
-      color: var(--muted);
+      color: var(--primary);
     }
 
     .content {
       flex: 1;
-      overflow-y: auto;
       border: 1px solid var(--border);
       border-radius: 10px;
       background: var(--panel);
@@ -68,7 +68,7 @@
       color: var(--text);
       font-size: 16px;
       line-height: 1.5;
-      margin-top: 40px;
+      margin-top: 16px;
     }
 
     .empty-state p {
@@ -139,7 +139,7 @@
       border-radius: 8px;
       border: 1px solid #2a2a2a;
       background: #0f0f0f;
-      color: #ccc;
+      color: var(--primary);
       text-decoration: none;
       transition: border 0.2s, color 0.2s;
     }

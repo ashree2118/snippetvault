@@ -2,6 +2,7 @@
 
 import { signIn, signOut, useSession } from "@/lib/auth-client";
 import SnippetGrid from '@/components/SnippetGrid';
+import Footer from '@/components/Footer';
 
 // We accept the data passed down from the server
 export default function Dashboard({ initialSnippets }: { initialSnippets: any[] }) {
@@ -61,6 +62,7 @@ export default function Dashboard({ initialSnippets }: { initialSnippets: any[] 
 
         {/* DATA GRID */}
         <SnippetGrid initialData={initialSnippets} />
+        <Footer/>
 
         </div>
       </div></div>
