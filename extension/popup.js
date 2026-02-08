@@ -1,3 +1,20 @@
+/**
+ * Extracts only code from snippet content (markdown with optional ``` code blocks).
+ * Returns pure code: either the first code block, or all code blocks joined; if none, returns trimmed content.
+ */
+function getCodeOnly(raw) {
+    if (!raw || !String(raw).trim()) return '';
+    const str = String(raw).trim();
+    const fenceRe = /```\w*\s*\n([\s\S]*?)```/g;
+    const blocks = [];
+    let match;
+    while ((match = fenceRe.exec(str)) !== null) {
+        blocks.push(match[1].trim());
+    }
+    if (blocks.length > 0) return blocks.join('\n\n');
+    return str;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const contentDiv = document.getElementById('content');
     const recentBlock = document.getElementById('recent-snippet');
@@ -42,6 +59,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 2. Fetch most recent snippet from dashboard (when user has session)
+    if (recentBlock) {
+        recentBlock.classList.add('visible', 'loading');
+    }
     try {
         const res = await fetch('https://snippet-two-rust.vercel.app/api/snippet', {
             method: 'GET',
@@ -52,12 +72,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             const data = await res.json();
             if (data.snippet && recentBlock && recentTitle && recentPreview) {
                 recentTitle.textContent = data.snippet.title || 'Untitled';
-                const code = (data.snippet.code || '').trim();
-                recentPreview.textContent = code.length > 200 ? code.slice(0, 200) + '…' : code;
-                recentBlock.classList.add('visible');
+                const code = getCodeOnly(data.snippet.code || '');
+                recentPreview.textContent = code.length > 250 ? code.slice(0, 250) + '…' : code;
+                recentBlock.classList.remove('loading');
+            } else {
+                recentBlock.classList.remove('visible', 'loading');
             }
+        } else {
+            recentBlock.classList.remove('visible', 'loading');
         }
     } catch (_) {
-        // No recent snippet or not logged in – keep recent block hidden
+        if (recentBlock) recentBlock.classList.remove('visible', 'loading');
     }
 });
