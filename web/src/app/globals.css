@@ -54,3 +54,19 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.slanted-lines {
+  width: 16rem;
+  min-width: 16rem;
+  min-height: 100vh;
+  flex-shrink: 0;
+
+  background: repeating-linear-gradient(
+    135deg,
+    #000000 0px,
+    #000000 10px,
+    rgba(255, 255, 255, 0.12) 10px,
+    rgba(255, 255, 255, 0.12) 12px
+  );
+}
+

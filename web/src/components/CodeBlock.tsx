@@ -65,7 +65,7 @@ export default function CodeBlock({ code, language, expanded = false }: CodeBloc
         ) : (
           // Fallback to plain text while loading (prevents flickering)
           <pre 
-            className="font-mono text-[11.5px] leading-[1.8] text-[#c8c8c8] whitespace-pre-wrap break-words"
+            className="font-mono text-[11.5px] leading-[1.8] text-[#e8e8e8] whitespace-pre-wrap break-words"
             style={{ margin: 0, padding: '20px 50px 20px 20px' }}
           >
             {cleanCode}

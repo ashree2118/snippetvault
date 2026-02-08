@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useSnippetStore } from '@/store/useSnippetStore';
 import CodeBlock from './CodeBlock';
+import { parseSnippetContent } from '@/lib/parseSnippetContent';
 import { Search } from 'lucide-react';
-import { Check, Copy, Maximize2, Minimize2 } from 'lucide-react';
+import { Maximize2, Minimize2 } from 'lucide-react';
 
 export default function SnippetGrid({ initialData }: { initialData: any[] }) {
   const { setSnippets, setSearchQuery, filteredSnippets } = useSnippetStore();
@@ -43,18 +44,21 @@ export default function SnippetGrid({ initialData }: { initialData: any[] }) {
   );
 }
 
+const MAX_DESCRIPTION_PREVIEW = 150;
+
 function SnippetCard({ snippet }: { snippet: any }) {
   const [expanded, setExpanded] = useState(false);
 
-  const description = (snippet as any).explanation || '';
-  const shouldTruncate = description.length > 150;
-  const displayDescription = expanded ? description : description.slice(0, 150);
+  // Combine optional explanation with code so we get text → code → text... order
+  const explanation = (snippet as any).explanation || '';
+  const fullContent = [explanation, snippet.code].filter(Boolean).join('\n\n');
+  const segments = parseSnippetContent(fullContent, snippet.language?.toLowerCase() || 'text');
 
   return (
     <div className="rounded-2xl p-6 border border-[#1a1a1a]">
       {/* Title row: title left, expand button right */}
       <div className="flex items-start justify-between gap-3 mb-2">
-        <h2 className="text-[15px] font-bold text-white leading-snug tracking-[-0.01em] flex-1 min-w-0">
+        <h2 className="text-[15px] font-bold text-[#e8e8e8] leading-snug tracking-[-0.01em] flex-1 min-w-0">
           {snippet.title || "Title of the code snippet"}
         </h2>
         <button
@@ -66,40 +70,55 @@ function SnippetCard({ snippet }: { snippet: any }) {
         </button>
       </div>
 
-      {/* Description */}
-      <p className="text-[12.5px] text-[#777] leading-[1.7] mb-4">
-        {description ? displayDescription : 'Description of the code snippet explaining what is there. the text part will go here'}
-        {shouldTruncate && !expanded && (
-          <>
-            {' '}
-            <button 
-              onClick={() => setExpanded(true)}
-              className="text-white font-semibold hover:underline"
-            >
-              See more
-            </button>
-          </>
-        )}
-        {shouldTruncate && expanded && (
-          <>
-            {' '}
-            <button 
-              onClick={() => setExpanded(false)}
-              className="text-white font-semibold hover:underline"
-            >
-              See less
-            </button>
-          </>
-        )}
-      </p>
-
-      {/* Code Block - expanded state from card controls full code height */}
-      <div className="rounded-xl overflow-hidden">
-        <CodeBlock 
-          code={snippet.code} 
-          language={snippet.language?.toLowerCase() || 'text'}
-          expanded={expanded}
-        />
+      {/* Segments: description → code block → description → code block ... */}
+      <div className="flex flex-col gap-4">
+        {segments.map((seg, i) => {
+          if (seg.type === 'text') {
+            const shouldTruncate = !expanded && seg.content.length > MAX_DESCRIPTION_PREVIEW;
+            const displayText = shouldTruncate
+              ? seg.content.slice(0, MAX_DESCRIPTION_PREVIEW)
+              : seg.content;
+            return (
+              <p
+                key={i}
+                className="text-[12.5px] text-[#777] leading-[1.7]"
+              >
+                {displayText}
+                {shouldTruncate && (
+                  <>
+                    {' '}
+                    <button
+                      onClick={() => setExpanded(true)}
+                      className="text-white font-semibold hover:underline"
+                    >
+                      See more
+                    </button>
+                  </>
+                )}
+                {expanded && seg.content.length > MAX_DESCRIPTION_PREVIEW && (
+                  <>
+                    {' '}
+                    <button
+                      onClick={() => setExpanded(false)}
+                      className="text-white font-semibold hover:underline"
+                    >
+                      See less
+                    </button>
+                  </>
+                )}
+              </p>
+            );
+          }
+          return (
+            <div key={i} className="rounded-xl overflow-hidden">
+              <CodeBlock
+                code={seg.content}
+                language={seg.language}
+                expanded={expanded}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

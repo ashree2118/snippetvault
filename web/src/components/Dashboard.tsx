@@ -8,12 +8,17 @@ export default function Dashboard({ initialSnippets }: { initialSnippets: any[] 
   const { data: session, isPending } = useSession();
 
   return (
-    <div className="min-h-screen bg-[#000000] text-[#e0e0e0] font-sans">
-      <div className="max-w-[680px] mx-auto px-5 py-8">
+    <div className="min-h-screen bg-[#000000] text-[#e0e0e0] font-sans flex overflow-x-auto">
+      {/* Left slanted lines */}
+      <div className="slanted-lines" aria-hidden />
+      {/* Main content */}
+      <div className=" w-full border-l border-r border-[rgba(255,255,255,0.12)]">
+      <div className="flex-1 min-w-0 flex justify-center">
+        <div className="max-w-[680px] w-full px-5 py-8">
         
         {/* HEADER */}
         <header className="flex justify-between items-center mb-7">
-          <h1 className="text-[22px] font-bold text-white tracking-[-0.02em]">
+          <h1 className="text-[22px] font-bold text-[#e8e8e8] tracking-[-0.02em]">
             Snippet
           </h1>
 
@@ -57,7 +62,11 @@ export default function Dashboard({ initialSnippets }: { initialSnippets: any[] 
         {/* DATA GRID */}
         <SnippetGrid initialData={initialSnippets} />
 
-      </div>
+        </div>
+      </div></div>
+      {/* Right slanted lines */}
+      <div className="slanted-lines" aria-hidden />
     </div>
+    
   );
 }
