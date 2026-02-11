@@ -3,6 +3,7 @@
 import { signIn } from "@/lib/auth-client";
 import { Check, Code, Zap, Globe, Moon, Database, ArrowRight } from "lucide-react";
 import Footer from '@/components/Footer';
+import { BorderBeam } from "@/components/ui/border-beam";
 
 export default function LandingPage() {
    return (
@@ -19,12 +20,13 @@ export default function LandingPage() {
                <h1 className="text-[22px] font-bold text-[#e8e8e8] tracking-[-0.02em]">
                   Snippet
                </h1>
-               <div>
+               <div className="relative inline-flex overflow-hidden rounded-lg border border-[#2a2a2a]">
                   <button
                      onClick={() => signIn.social({ provider: "google" })}
-                     className="flex items-center gap-2 text-[13px] text-[#ccc] border border-[#2a2a2a] px-4 py-[7px] rounded-lg hover:border-[#444] hover:text-white transition-colors"
+                     className="relative z-10 flex items-center gap-2 text-[13px] text-[#ccc]
+               px-4 py-[7px]
+               hover:text-white transition-colors bg-transparent"
                   >
-                     {/* Google Icon */}
                      <svg className="w-4 h-4" viewBox="0 0 24 24">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
@@ -33,6 +35,12 @@ export default function LandingPage() {
                      </svg>
                      Sign in
                   </button>
+
+                  <BorderBeam
+                     duration={4}
+                     size={40}
+                     className="pointer-events-none from-[#15B19A] via-[#15B19A] to-white/10"
+                  />
                </div>
             </header>
 
