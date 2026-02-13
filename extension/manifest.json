@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Snippet",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Save code, articles, and error solutions from the web. Snippet uses AI to add clear titles and tags, making it easy to find later.",
   "permissions": [
     "contextMenus", 
