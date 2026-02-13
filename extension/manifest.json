@@ -5,8 +5,7 @@
   "description": "Save code, articles, and error solutions from the web. Snippet uses AI to add clear titles and tags, making it easy to find later.",
   "permissions": [
     "contextMenus", 
-    "activeTab", 
-    "storage" 
+    "activeTab"
   ],
   "host_permissions": [
     "https://saveto-snippet.vercel.app/*" 
