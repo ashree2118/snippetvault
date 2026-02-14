@@ -4,6 +4,11 @@ import { signIn } from "@/lib/auth-client";
 import { Check, Code, Zap, Globe, Moon, Database, ArrowRight } from "lucide-react";
 import Footer from '@/components/Footer';
 import { BorderBeam } from "@/components/ui/border-beam";
+import Image from "next/image";
+import img1 from "@/components/ui/img1.png";
+import img2 from "@/components/ui/img2.png";
+import img3 from "@/components/ui/img3.png";
+
 
 export default function LandingPage() {
    return (
@@ -57,8 +62,34 @@ export default function LandingPage() {
                      Save anything from the web in one click. Find it anytime.
                   </p>
                   <button
-                     onClick={() => signIn.social({ provider: "google" })}
-                     className="bg-white text-black font-medium px-8 py-3 rounded-full hover:bg-[#e0e0e0] transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2"
+                     onClick={() =>
+                        window.open(
+                           "https://chromewebstore.google.com/detail/eiocbpfklgmgmmnhgcklcpbnmedjmkjh?utm_source=item-share-cb",
+                           "_blank"
+                        )
+                     }
+                     className="
+    inline-flex
+    h-[50px]
+    px-[22px]
+    justify-center
+    items-center
+    gap-[10px]
+    rounded-[20px]
+    border
+    border-[#565656]
+    text-white
+    font-regular
+    transition-all
+    transform
+    hover:scale-105
+    active:scale-95
+  "
+                     style={{
+                        background:
+                           "linear-gradient(180deg, #2E2E2E 0%, #242424 28.25%, #222 56.5%, #000 113%)",
+                        boxShadow: "0px 6px 6.1px 0 rgba(255, 255, 255, 0.10)",
+                     }}
                   >
                      Get Started Free <ArrowRight size={18} />
                   </button>
@@ -76,32 +107,32 @@ export default function LandingPage() {
                {/* WHAT IT DOES (Very clear) */}
                <section className="w-full max-w-4xl mx-auto px-6 py-24">
                   <div className="text-center mb-16">
-                     <h2 className="text-3xl font-bold text-white mb-4">What is Snippet?</h2>
+                     <h2 className="text-3xl font-bold text-[#15B19A] mb-4">What is <span className="text-white">Snippet?</span></h2>
                      <p className="text-[#888] max-w-2xl mx-auto text-lg leading-relaxed">
                         Snippet helps you save useful code and explanations from the web and keeps them organized automatically.
                      </p>
                   </div>
-
                   <div className="grid md:grid-cols-3 gap-8 text-center">
-                     <div className="p-6 rounded-2xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-colors">
-                        <div className="w-12 h-12 bg-[#1a1a1a] rounded-full flex items-center justify-center mx-auto mb-4 text-[#ff4d4d]">
-                           <Check size={24} />
+                     <div className="p-6 rounded-2xl bg-[#0B0B0B] border border-[#1e1e1e] hover:border-[#333] transition-colors">
+                        <div className="relative w-48 h-32 mx-auto mb-2">
+                           <Image src={img1} alt="No bookmarks" fill className="object-contain" />
                         </div>
-                        <h3 className="text-white font-medium mb-2">No messy bookmarks</h3>
+                        <h3 className="text-[#999] font-medium mb-2">No messy bookmarks</h3>
                      </div>
-                     <div className="p-6 rounded-2xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-colors">
-                        <div className="w-12 h-12 bg-[#1a1a1a] rounded-full flex items-center justify-center mx-auto mb-4 text-[#ffa600]">
-                           <Check size={24} />
+                     <div className="p-6 rounded-2xl bg-[#0B0B0B] border border-[#1e1e1e] hover:border-[#333] transition-colors">
+                        <div className="relative w-48 h-32 mx-auto mb-2">
+                           <Image src={img2} alt="No lost solutions" fill className="object-contain" />
                         </div>
-                        <h3 className="text-white font-medium mb-2">No lost solutions</h3>
+                        <h3 className="text-[#999] font-medium mb-2">No lost solutions</h3>
                      </div>
-                     <div className="p-6 rounded-2xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-colors">
-                        <div className="w-12 h-12 bg-[#1a1a1a] rounded-full flex items-center justify-center mx-auto mb-4 text-[#00b894]">
-                           <Check size={24} />
+                     <div className="p-6 rounded-2xl bg-[#0B0B0B] border border-[#1e1e1e] hover:border-[#333] transition-colors">
+                        <div className="relative w-48 h-32 mx-auto mb-2">
+                           <Image src={img3} alt="No manual sorting" fill className="object-contain" />
                         </div>
-                        <h3 className="text-white font-medium mb-2">No manual sorting</h3>
+                        <h3 className="text-[#999] font-medium mb-2">No manual sorting</h3>
                      </div>
                   </div>
+
                </section>
 
                {/* HOW IT WORKS (Simple steps) */}
@@ -148,7 +179,7 @@ export default function LandingPage() {
 
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                      <div className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group">
-                        <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#ccc] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
+                        <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#15B19A] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
                            <Globe size={24} />
                         </div>
                         <h3 className="text-xl font-bold text-white mb-3">One-Click Save</h3>
@@ -156,7 +187,7 @@ export default function LandingPage() {
                      </div>
 
                      <div className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group">
-                        <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#ccc] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
+                        <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#15B19A] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
                            <Database size={24} />
                         </div>
                         <h3 className="text-xl font-bold text-white mb-3">AI Auto-Organizes</h3>
@@ -164,7 +195,7 @@ export default function LandingPage() {
                      </div>
 
                      <div className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group">
-                        <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#ccc] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
+                        <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#15B19A] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
                            <Code size={24} />
                         </div>
                         <h3 className="text-xl font-bold text-white mb-3">Clean Code Formatting</h3>
@@ -172,7 +203,7 @@ export default function LandingPage() {
                      </div>
 
                      <div className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group">
-                        <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#ccc] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
+                        <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#15B19A] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
                            <Zap size={24} />
                         </div>
                         <h3 className="text-xl font-bold text-white mb-3">Cloud Sync</h3>
@@ -180,7 +211,7 @@ export default function LandingPage() {
                      </div>
 
                      <div className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group lg:col-span-2">
-                        <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#ccc] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
+                        <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#15B19A] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
                            <Moon size={24} />
                         </div>
                         <h3 className="text-xl font-bold text-white mb-3">Dark Mode UI</h3>
@@ -199,26 +230,26 @@ export default function LandingPage() {
 
                      <div className="flex-1 space-y-6">
                         <div className="flex gap-4 items-start">
-                           <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                              <Check size={14} className="text-green-500" />
+                           <div className="w-6 h-6 rounded-full bg-[#15B19A]/10 flex items-center justify-center shrink-0 mt-0.5">
+                              <Check size={14} className="text-[#15B19A]" />
                            </div>
                            <p className="text-[#ccc] text-lg">Never lose a fix you found online</p>
                         </div>
                         <div className="flex gap-4 items-start">
-                           <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                              <Check size={14} className="text-green-500" />
+                           <div className="w-6 h-6 rounded-full bg-[#15B19A]/10 flex items-center justify-center shrink-0 mt-0.5">
+                              <Check size={14} className="text-[#15B19A]" />
                            </div>
                            <p className="text-[#ccc] text-lg">Find old solutions in seconds</p>
                         </div>
                         <div className="flex gap-4 items-start">
-                           <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                              <Check size={14} className="text-green-500" />
+                           <div className="w-6 h-6 rounded-full bg-[#15B19A]/10 flex items-center justify-center shrink-0 mt-0.5">
+                              <Check size={14} className="text-[#15B19A]" />
                            </div>
                            <p className="text-[#ccc] text-lg">Learn faster by saving what matters</p>
                         </div>
                         <div className="flex gap-4 items-start">
-                           <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                              <Check size={14} className="text-green-500" />
+                           <div className="w-6 h-6 rounded-full bg-[#15B19A]/10 flex items-center justify-center shrink-0 mt-0.5">
+                              <Check size={14} className="text-[#15B19A]" />
                            </div>
                            <p className="text-[#ccc] text-lg">Keep everything in one place</p>
                         </div>
@@ -281,10 +312,36 @@ export default function LandingPage() {
 
                   <div className="flex flex-col items-center gap-6">
                      <button
-                        onClick={() => signIn.social({ provider: "google" })}
-                        className="bg-white text-black font-medium px-8 py-4 rounded-full hover:bg-[#e0e0e0] transition-all transform hover:scale-105 active:scale-95 flex items-center gap-3 text-lg"
+                        onClick={() =>
+                           window.open(
+                              "https://chromewebstore.google.com/detail/eiocbpfklgmgmmnhgcklcpbnmedjmkjh?utm_source=item-share-cb",
+                              "_blank"
+                           )
+                        }
+                        className="
+    inline-flex
+    h-[50px]
+    px-[22px]
+    justify-center
+    items-center
+    gap-[10px]
+    rounded-[20px]
+    border
+    border-[#565656]
+    text-white
+    font-regular
+    transition-all
+    transform
+    hover:scale-105
+    active:scale-95
+  "
+                        style={{
+                           background:
+                              "linear-gradient(180deg, #2E2E2E 0%, #242424 28.25%, #222 56.5%, #000 113%)",
+                           boxShadow: "0px 6px 6.1px 0 rgba(255, 255, 255, 0.10)",
+                        }}
                      >
-                        Install Snippet – Free <ArrowRight size={20} />
+                        Install Snippet <ArrowRight size={18} />
                      </button>
                      <p className="text-sm text-[#555]">Free forever for individual developers.</p>
                   </div>
