@@ -1,19 +1,20 @@
 {
   "manifest_version": 3,
   "name": "Snippet",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Save code, articles, and error solutions from the web. Snippet uses AI to add clear titles and tags, making it easy to find later.",
   "permissions": [
-    "contextMenus", 
-    "activeTab"
+    "contextMenus",
+    "activeTab",
+    "scripting"
   ],
   "host_permissions": [
-    "https://saveto-snippet.vercel.app/*" 
+    "https://saveto-snippet.vercel.app/*"
   ],
   "background": {
     "service_worker": "background.js"
   },
-    "action": {
+  "action": {
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",

@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const recentTitle = document.getElementById('recent-snippet-title');
     const recentPreview = document.getElementById('recent-snippet-preview');
 
+    const statusSpan = document.getElementById('connection-status');
+    const dashboardBtn = document.getElementById('dashboard-btn');
+
     // 1. Check if the server is alive
     try {
         const response = await fetch('https://saveto-snippet.vercel.app/api/auth/get-session', {
@@ -28,16 +31,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             headers: {
                 'Content-Type': 'application/json'
             }
-            // Note: Chrome Extensions struggle with 'credentials: include' for localhost 
-            // without complex permission setups. For MVP, we just check connectivity.
         });
 
         if (response.ok) {
-            // Update UI to show we are connected
-            const statusDot = document.querySelector('.status-dot');
-            if (statusDot) {
-                statusDot.style.backgroundColor = '#22c55e'; // Green
-                statusDot.title = "Connected to Localhost";
+            const data = await response.json();
+
+            // Check if we actually have a session
+            if (data && (data.session || data.user)) {
+                // Update UI to show we are connected
+                if (statusSpan) {
+                    statusSpan.textContent = 'Online';
+                    statusSpan.style.color = '#22c55e'; // Green
+                    statusSpan.title = "Connected";
+                }
+                if (dashboardBtn) {
+                    dashboardBtn.textContent = "Open Dashboard";
+                }
+            } else {
+                // Response OK but no session data -> Not signed in
+                throw new Error("No active session");
             }
         } else {
             throw new Error("Server error");
@@ -45,15 +57,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     } catch (error) {
         // Offline / Error State
-        const statusDot = document.querySelector('.status-dot');
-        if (statusDot) {
-            statusDot.style.backgroundColor = '#ef4444'; // Red
-            statusDot.title = "Cannot connect to server";
+        if (statusSpan) {
+            statusSpan.textContent = 'Offline';
+            statusSpan.style.color = '#ef4444'; // Red
+            statusSpan.title = "Cannot connect or not signed in";
+        }
+        if (dashboardBtn) {
+            dashboardBtn.textContent = "Sign in to save snippets";
         }
         contentDiv.innerHTML = `
             <div class="empty-state">
-                <p style="color: #ef4444;">Server Disconnected</p>
-                <p style="font-size: 11px;">Is 'npm run dev' running?</p>
+                <p style="color: #ef4444;">Disconnected</p>
+                <p style="font-size: 11px;">Please sign in via dashboard</p>
             </div>
         `;
     }

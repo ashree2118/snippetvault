@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <style>
     :root {
@@ -73,7 +74,7 @@
       margin: 0;
     }
 
-    .empty-state p + p {
+    .empty-state p+p {
       margin-top: 6px;
       font-size: 12px;
       color: #666;
@@ -124,7 +125,9 @@
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .recent-snippet-loader span {
@@ -168,7 +171,7 @@
       border-radius: 8px;
       border: 1px solid #2a2a2a;
       background: #0f0f0f;
-      color: var(--primary);
+      color: var(--text);
       text-decoration: none;
       transition: border 0.2s, color 0.2s;
     }
@@ -179,11 +182,12 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <header>
       <h1>Snippet</h1>
-      <span class="status">Online</span>
+      <span class="status" id="connection-status" style="color: #ef4444;">Offline</span>
     </header>
 
     <div class="content">
@@ -209,11 +213,7 @@
     </div>
 
     <div class="footer">
-      <a
-        href="https://saveto-snippet.vercel.app"
-        target="_blank"
-        class="btn"
-      >
+      <a href="https://saveto-snippet.vercel.app" target="_blank" class="btn" id="dashboard-btn">
         Open Dashboard
       </a>
     </div>
@@ -221,4 +221,5 @@
 
   <script src="popup.js"></script>
 </body>
+
 </html>
