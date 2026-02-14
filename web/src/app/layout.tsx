@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const interSans = Inter({
   variable: "--font-inter-sans",
@@ -27,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${interSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );
