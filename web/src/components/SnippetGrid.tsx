@@ -73,9 +73,9 @@ function SnippetCard({ snippet }: { snippet: any }) {
           <button
             onClick={handleDelete}
             aria-label="Delete snippet"
-            className="flex items-center justify-center p-1.5 text-[#666] hover:text-[#ff4d4d] hover:bg-[#2a1a1a] rounded-lg transition-colors"
+            className="flex items-center justify-center p-2 text-[#a0a0a0] hover:text-[#ff4d4d] hover:bg-[#2a1a1a] rounded-lg transition-all"
           >
-            <Trash2 size={14} />
+            <Trash2 size={16} />
           </button>
 
           <button
