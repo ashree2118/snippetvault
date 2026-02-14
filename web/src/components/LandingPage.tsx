@@ -107,7 +107,7 @@ export default function LandingPage() {
                {/* WHAT IT DOES (Very clear) */}
                <section className="w-full max-w-4xl mx-auto px-6 py-24">
                   <div className="text-center mb-16">
-                     <h2 className="text-3xl font-bold text-[#15B19A] mb-4">What is <span className="text-white">Snippet?</span></h2>
+                     <h2 className="text-3xl font-bold text-[#999] mb-4">What is <span className="text-white">Snippet?</span></h2>
                      <p className="text-[#888] max-w-2xl mx-auto text-lg leading-relaxed">
                         Snippet helps you save useful code and explanations from the web and keeps them organized automatically.
                      </p>

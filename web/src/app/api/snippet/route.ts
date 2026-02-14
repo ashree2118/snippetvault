@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { GoogleGenAI } from "@google/genai"; 
-import { auth } from "@/lib/auth"; 
+import { GoogleGenAI } from "@google/genai";
+import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
 export async function GET() {
@@ -67,7 +67,8 @@ export async function POST(req: Request) {
     let aiData = {
       title: "Untitled Snippet",
       language: "text",
-      formattedContent: code, 
+      description: "",
+      formattedContent: code,
       tags: ["pending"],
     };
 
@@ -75,20 +76,21 @@ export async function POST(req: Request) {
     if (process.env.GEMINI_API_KEY) {
       try {
         const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-        
+
         const prompt = `
           Analyze this code snippet or text:
           "${code}"
 
           1. Generate a short title (max 5 words).
-          2. Generate 5-9 relevant tags.
-          3. Detect the primary language.
-          4. FORMAT THE CONTENT: If the input is mixed text and code, reformat it into valid Markdown. 
+          2. Generate a concise description/explanation of what the code does (max 2 sentences).
+          3. Generate 5-9 relevant tags.
+          4. Detect the primary language.
+          5. FORMAT THE CONTENT: If the input is mixed text and code, reformat it into valid Markdown. 
              - Use standard text for explanations.
              - Use \`\`\`language blocks for code.
              - Fix indentation if broken.
           
-          Return JSON: { "title": "...", "tags": ["..."], "language": "...", "formattedContent": "..." }
+          Return JSON: { "title": "...", "description": "...", "tags": ["..."], "language": "...", "formattedContent": "..." }
         `;
 
         const response = await genAI.models.generateContent({
@@ -100,13 +102,13 @@ export async function POST(req: Request) {
             }
           ],
           config: {
-            responseMimeType: "application/json", 
+            responseMimeType: "application/json",
           }
         });
 
         if (response.text) {
-           aiData = JSON.parse(response.text);
-           console.log("⚡ Gemini Success:", aiData.title);
+          aiData = JSON.parse(response.text);
+          console.log("⚡ Gemini Success:", aiData.title);
         }
 
       } catch (err) {
@@ -119,6 +121,7 @@ export async function POST(req: Request) {
       data: {
         userId: session.user.id, // Connect to the logged-in user
         title: aiData.title || "Untitled",
+        explanation: aiData.description || "",
         code: aiData.formattedContent || code,
         language: aiData.language || "text",
         tags: aiData.tags || [],
