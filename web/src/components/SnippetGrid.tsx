@@ -53,18 +53,15 @@ function SnippetCard({ snippet }: { snippet: any }) {
 
   // Edit State
   const [editTitle, setEditTitle] = useState(snippet.title || '');
-  const [editExplanation, setEditExplanation] = useState(snippet.explanation || '');
   const [editCode, setEditCode] = useState(snippet.code || '');
 
   // Initialize edit state when entering edit mode
   useEffect(() => {
     if (isEditing) {
       setEditTitle(snippet.title || '');
-      setEditExplanation(snippet.explanation || '');
-
-      // Legacy handling: if no explanation exists, try to separate it from code? 
-      // For now, simpler: if explanation is empty, everything is in code. Users can cut/paste.
-      setEditCode(snippet.code || '');
+      // Combine explanation and code for editing
+      const initialContent = [snippet.explanation, snippet.code].filter(Boolean).join('\n\n');
+      setEditCode(initialContent || '');
     }
   }, [isEditing, snippet]);
 
@@ -77,20 +74,20 @@ function SnippetCard({ snippet }: { snippet: any }) {
   const handleSave = async () => {
     await updateSnippet(snippet.id, {
       title: editTitle,
-      explanation: editExplanation,
+      explanation: null, // Clear explanation, everything moves to code
       code: editCode,
     });
     setIsEditing(false);
   };
 
   // View Logic
-  // If we have an explanation, we render it separately.
-  // Otherwise, we do legacy parsing on the code field.
-  const hasExplanation = !!snippet.explanation;
+  // We always use parseSnippetContent now to support the unified storage model
+  // If explanation exists (legacy), we combine it for display consistency or just parse separately.
+  // Actually, to support the "text then code" look from a single field, parseSnippetContent does exactly that.
+  // So we can just join them if they are separate, or use code if it's already combined.
 
-  // Legacy parsing (fallback)
-  const fullContent = [snippet.explanation, snippet.code].filter(Boolean).join('\n\n'); // Only used for legacy mixed content
-  const segments = !hasExplanation ? parseSnippetContent(fullContent, snippet.language?.toLowerCase() || 'text') : [];
+  const contentToRender = [snippet.explanation, snippet.code].filter(Boolean).join('\n\n');
+  const segments = parseSnippetContent(contentToRender, snippet.language?.toLowerCase() || 'text');
 
   return (
     <div className="rounded-2xl p-6 border border-[#1a1a1a]">
@@ -161,76 +158,48 @@ function SnippetCard({ snippet }: { snippet: any }) {
       <div className="flex flex-col gap-4 mt-2">
         {isEditing ? (
           <>
-            {/* Explanation Input */}
+            {/* Content Input */}
             <div>
-              <label className="block text-[11px] text-[#555] uppercase tracking-wider mb-1 font-semibold">Explanation</label>
-              <textarea
-                value={editExplanation}
-                onChange={(e) => setEditExplanation(e.target.value)}
-                className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-[13px] text-[#ccc] focus:outline-none focus:border-[#555] min-h-[80px]"
-                placeholder="Add an explanation..."
-              />
-            </div>
-
-            {/* Code Input */}
-            <div>
-              <label className="block text-[11px] text-[#555] uppercase tracking-wider mb-1 font-semibold">Code</label>
+              <label className="block text-[11px] text-[#555] uppercase tracking-wider mb-1 font-semibold">Content</label>
               <textarea
                 value={editCode}
                 onChange={(e) => setEditCode(e.target.value)}
-                className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-[13px] text-[#ccc] font-mono focus:outline-none focus:border-[#555] min-h-[150px] max-h-[60vh] overflow-y-auto overscroll-contain"
-                placeholder="Paste your code here..."
+                onWheel={(e) => e.stopPropagation()}
+                className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-[13px] text-[#ccc] font-mono focus:outline-none focus:border-[#555] min-h-[200px] max-h-[60vh] overflow-y-auto overscroll-contain"
+                placeholder="Add text or code (use ``` for code blocks)..."
               />
             </div>
           </>
         ) : (
-          hasExplanation ? (
-            // New Clean Render: Explanation -> Code
-            <>
-              {snippet.explanation && (
-                <p className="text-[12.5px] text-[#777] leading-[1.7]">
-                  {snippet.explanation}
+          segments.map((seg, i) => {
+            if (seg.type === 'text') {
+              const shouldTruncate = !expanded && seg.content.length > MAX_DESCRIPTION_PREVIEW;
+              const displayText = shouldTruncate
+                ? seg.content.slice(0, MAX_DESCRIPTION_PREVIEW)
+                : seg.content;
+              return (
+                <p key={i} className="text-[12.5px] text-[#777] leading-[1.7]">
+                  {displayText}
+                  {shouldTruncate && (
+                    <button onClick={() => setExpanded(true)} className="text-white font-semibold hover:underline ml-1">See more</button>
+                  )}
+                  {expanded && seg.content.length > MAX_DESCRIPTION_PREVIEW && (
+                    <button onClick={() => setExpanded(false)} className="text-white font-semibold hover:underline ml-1">See less</button>
+                  )}
                 </p>
-              )}
-              <div className="rounded-xl overflow-hidden">
+              );
+            }
+            return (
+              <div key={i} className="rounded-xl overflow-hidden">
                 <CodeBlock
-                  code={snippet.code}
-                  language={snippet.language}
+                  code={seg.content}
+                  language={seg.language}
                   expanded={expanded}
                 />
               </div>
-            </>
-          ) : (
-            // Legacy Logic
-            segments.map((seg, i) => {
-              if (seg.type === 'text') {
-                const shouldTruncate = !expanded && seg.content.length > MAX_DESCRIPTION_PREVIEW;
-                const displayText = shouldTruncate
-                  ? seg.content.slice(0, MAX_DESCRIPTION_PREVIEW)
-                  : seg.content;
-                return (
-                  <p key={i} className="text-[12.5px] text-[#777] leading-[1.7]">
-                    {displayText}
-                    {shouldTruncate && (
-                      <button onClick={() => setExpanded(true)} className="text-white font-semibold hover:underline ml-1">See more</button>
-                    )}
-                    {expanded && seg.content.length > MAX_DESCRIPTION_PREVIEW && (
-                      <button onClick={() => setExpanded(false)} className="text-white font-semibold hover:underline ml-1">See less</button>
-                    )}
-                  </p>
-                );
-              }
-              return (
-                <div key={i} className="rounded-xl overflow-hidden">
-                  <CodeBlock
-                    code={seg.content}
-                    language={seg.language}
-                    expanded={expanded}
-                  />
-                </div>
-              );
-            })
-          )
+            );
+          })
+        )
         )}
       </div>
     </div>
