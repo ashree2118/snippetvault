@@ -218,7 +218,7 @@ function SnippetCard({ snippet }: { snippet: any }) {
           {snippet.tags.map((tag: string, index: number) => (
             <span
               key={index}
-              className="px-2.5 py-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-full text-[11px] text-[#888]"
+              className="px-2.5 py-1 bg-transparent border border-[#2a2a2a] rounded-full text-[11px] text-[#888]"
             >
               {tag}
             </span>
