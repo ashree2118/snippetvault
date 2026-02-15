@@ -24,7 +24,7 @@ export default function Dashboard({ initialSnippets }: { initialSnippets: any[] 
 
             {/* HEADER */}
             <header className="flex justify-between items-center mb-7">
-              <h1 className="text-[22px] font-bold text-[#e8e8e8] tracking-[-0.02em]">
+              <h1 className="text-[22px] font-bold text-[#F1F1F1] tracking-[-0.02em]">
                 Snippet
               </h1>
 

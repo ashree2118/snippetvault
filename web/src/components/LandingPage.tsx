@@ -22,7 +22,7 @@ export default function LandingPage() {
 
             {/* Navbar Placeholder - matching Dashboard header style */}
             <header className="relative z-10 flex justify-between items-center px-6 py-5 max-w-6xl mx-auto w-full">
-               <h1 className="text-[22px] font-bold text-[#e8e8e8] tracking-[-0.02em]">
+               <h1 className="text-[22px] font-bold text-[#F1F1F1] tracking-[-0.02em]">
                   Snippet
                </h1>
                <div className="relative inline-flex overflow-hidden rounded-lg border border-[#2a2a2a]">

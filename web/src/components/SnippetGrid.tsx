@@ -98,11 +98,11 @@ function SnippetCard({ snippet }: { snippet: any }) {
             type="text"
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
-            className="flex-1 bg-[#111] border border-[#333] rounded-lg px-3 py-1.5 text-[15px] font-bold text-[#e8e8e8] focus:outline-none focus:border-[#555]"
+            className="flex-1 bg-[#111] border border-[#333] rounded-lg px-3 py-1.5 text-[15px] font-bold text-[#F1F1F1] focus:outline-none focus:border-[#555]"
             placeholder="Snippet Title"
           />
         ) : (
-          <h2 className="text-[15px] font-bold text-[#e8e8e8] leading-snug tracking-[-0.01em] flex-1 min-w-0">
+          <h2 className="text-[15px] font-bold text-[#F1F1F1] leading-snug tracking-[-0.01em] flex-1 min-w-0">
             {snippet.title || "Title of the code snippet"}
           </h2>
         )}
