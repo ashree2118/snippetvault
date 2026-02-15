@@ -130,14 +130,14 @@ function SnippetCard({ snippet }: { snippet: any }) {
               <button
                 onClick={() => setIsEditing(true)}
                 aria-label="Edit snippet"
-                className="flex items-center justify-center p-2 text-[#a0a0a0] hover:text-[#fff] hover:bg-[#2a2a2a] rounded-lg transition-all"
+                className="flex items-center justify-center p-2 text-[#737373] hover:text-[#fff] hover:bg-[#2a2a2a] rounded-lg transition-all"
               >
                 <Edit2 size={16} />
               </button>
               <button
                 onClick={handleDelete}
                 aria-label="Delete snippet"
-                className="flex items-center justify-center p-2 text-[#a0a0a0] hover:text-[#ff4d4d] hover:bg-[#2a1a1a] rounded-lg transition-all"
+                className="flex items-center justify-center p-2 text-[#737373] hover:text-[#ff4d4d] hover:bg-[#2a1a1a] rounded-lg transition-all"
               >
                 <Trash2 size={16} />
               </button>
@@ -211,6 +211,20 @@ function SnippetCard({ snippet }: { snippet: any }) {
         )
         }
       </div>
+
+      {/* Tags */}
+      {snippet.tags && snippet.tags.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-4">
+          {snippet.tags.map((tag: string, index: number) => (
+            <span
+              key={index}
+              className="px-2.5 py-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-full text-[11px] text-[#888]"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
