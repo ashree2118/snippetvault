@@ -178,7 +178,7 @@ function SnippetCard({ snippet }: { snippet: any }) {
               <textarea
                 value={editCode}
                 onChange={(e) => setEditCode(e.target.value)}
-                className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-[13px] text-[#ccc] font-mono focus:outline-none focus:border-[#555] min-h-[150px]"
+                className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-[13px] text-[#ccc] font-mono focus:outline-none focus:border-[#555] min-h-[150px] max-h-[60vh] overflow-y-auto overscroll-contain"
                 placeholder="Paste your code here..."
               />
             </div>
