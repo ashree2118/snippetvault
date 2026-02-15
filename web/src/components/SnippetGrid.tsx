@@ -158,14 +158,23 @@ function SnippetCard({ snippet }: { snippet: any }) {
       <div className="flex flex-col gap-4 mt-2">
         {isEditing ? (
           <>
-            {/* Content Input */}
+            {/* Content Input - Auto Expanding */}
             <div>
-              <label className="block text-[11px] text-[#555] uppercase tracking-wider mb-1 font-semibold">Content</label>
               <textarea
+                ref={(textarea) => {
+                  if (textarea) {
+                    textarea.style.height = 'auto';
+                    textarea.style.height = textarea.scrollHeight + 'px';
+                  }
+                }}
                 value={editCode}
-                onChange={(e) => setEditCode(e.target.value)}
+                onChange={(e) => {
+                  setEditCode(e.target.value);
+                  e.target.style.height = 'auto';
+                  e.target.style.height = e.target.scrollHeight + 'px';
+                }}
                 onWheel={(e) => e.stopPropagation()}
-                className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-[13px] text-[#ccc] font-mono focus:outline-none focus:border-[#555] min-h-[200px] max-h-[60vh] overflow-y-auto overscroll-contain"
+                className="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-[13px] text-[#ccc] font-mono focus:outline-none focus:border-[#555] overflow-hidden min-h-[200px]"
                 placeholder="Add text or code (use ``` for code blocks)..."
               />
             </div>
@@ -200,7 +209,7 @@ function SnippetCard({ snippet }: { snippet: any }) {
             );
           })
         )
-        )}
+        }
       </div>
     </div>
   );
