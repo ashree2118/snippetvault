@@ -45,3 +45,56 @@ export async function DELETE(
         );
     }
 }
+
+export async function PUT(
+    req: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers(),
+        });
+
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        const { id } = await params;
+
+        // Parse body
+        const body = await req.json();
+        const { title, explanation, code } = body;
+
+        // Verify snippet belongs to user
+        const snippet = await prisma.snippet.findUnique({
+            where: { id },
+            select: { userId: true },
+        });
+
+        if (!snippet) {
+            return NextResponse.json({ error: "Snippet not found" }, { status: 404 });
+        }
+
+        if (snippet.userId !== session.user.id) {
+            return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+        }
+
+        const updatedSnippet = await prisma.snippet.update({
+            where: { id },
+            data: {
+                title: title || undefined,
+                explanation: explanation || null, // Allow clearing explanation
+                code: code || undefined,
+                // We could also update language if we detected it, but simpler to leave for now or trust frontend/AI separately
+            },
+        });
+
+        return NextResponse.json({ success: true, snippet: updatedSnippet });
+    } catch (error) {
+        console.error("❌ API Error:", error);
+        return NextResponse.json(
+            { error: "Internal Server Error" },
+            { status: 500 }
+        );
+    }
+}

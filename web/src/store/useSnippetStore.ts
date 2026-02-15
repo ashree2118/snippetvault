@@ -6,6 +6,7 @@ interface Snippet {
   title: string | null;
   code: string;
   language: string | null;
+  explanation?: string | null;
   tags: string[];
 }
 
@@ -21,6 +22,7 @@ interface SnippetState {
   filteredSnippets: () => Snippet[];
 
   deleteSnippet: (id: string) => Promise<void>;
+  updateSnippet: (id: string, data: Partial<Snippet>) => Promise<void>;
 }
 
 export const useSnippetStore = create<SnippetState>((set, get) => ({
@@ -61,6 +63,28 @@ export const useSnippetStore = create<SnippetState>((set, get) => ({
     } catch (error) {
       console.error('Error deleting snippet:', error);
       // Rollback (optional, but good practice - omitting for simplicity unless requested)
+    }
+  },
+
+  updateSnippet: async (id: string, data: Partial<Snippet>) => {
+    // Optimistic update
+    set((state) => ({
+      snippets: state.snippets.map((s) => s.id === id ? { ...s, ...data } : s),
+    }));
+
+    try {
+      const response = await fetch(`/api/snippet/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update snippet');
+      }
+    } catch (error) {
+      console.error('Error updating snippet:', error);
+      // Rollback logic could go here
     }
   },
 }));
