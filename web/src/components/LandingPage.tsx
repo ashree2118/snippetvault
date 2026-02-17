@@ -8,6 +8,7 @@ import Image from "next/image";
 import img1 from "@/components/ui/img1.png";
 import img2 from "@/components/ui/img2.png";
 import img3 from "@/components/ui/img3.png";
+import { motion } from "framer-motion";
 
 
 export default function LandingPage() {
@@ -21,7 +22,12 @@ export default function LandingPage() {
             <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
 
             {/* Navbar Placeholder - matching Dashboard header style */}
-            <header className="relative z-10 flex justify-between items-center px-6 py-5 max-w-6xl mx-auto w-full">
+            <motion.header
+               className="relative z-10 flex justify-between items-center px-6 py-5 max-w-6xl mx-auto w-full"
+               initial={{ opacity: 0, y: -20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.5 }}
+            >
                <h1 className="text-[22px] font-bold text-[#F1F1F1] tracking-[-0.02em]">
                   Snippet
                </h1>
@@ -47,27 +53,44 @@ export default function LandingPage() {
                      className="pointer-events-none from-[#15B19A] via-[#15B19A] to-white/10"
                   />
                </div>
-            </header>
+            </motion.header>
 
             <main className="relative z-10 flex flex-col items-center w-full">
 
                {/* HERO SECTION */}
-               <section className="w-full max-w-4xl mx-auto px-6 py-20 text-center flex flex-col items-center">
-                  <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-b from-white to-[#888] bg-clip-text text-transparent mb-6 tracking-tight">
+               <motion.section
+                  className="w-full max-w-4xl mx-auto px-6 py-20 text-center flex flex-col items-center"
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+               >
+                  <motion.h1
+                     className="text-4xl md:text-6xl font-bold bg-gradient-to-b from-white to-[#888] bg-clip-text text-transparent mb-6 tracking-tight"
+                     initial={{ opacity: 0, y: 20 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ duration: 0.7, delay: 0.1 }}
+                  >
                      Save Code. Save Solutions.<br />
                      Find Them Instantly.
-                  </h1>
-                  <p className="text-lg md:text-xl text-[#888] max-w-2xl mb-10 leading-relaxed">
+                  </motion.h1>
+                  <motion.p
+                     className="text-lg md:text-xl text-[#888] max-w-2xl mb-10 leading-relaxed"
+                     initial={{ opacity: 0, y: 12 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ duration: 0.6, delay: 0.2 }}
+                  >
                      Snippet is your personal library for code, bug fixes, and tech notes.
                      Save anything from the web in one click. Find it anytime.
-                  </p>
-                  <button
+                  </motion.p>
+                  <motion.button
                      onClick={() =>
                         window.open(
                            "https://chromewebstore.google.com/detail/eiocbpfklgmgmmnhgcklcpbnmedjmkjh?utm_source=item-share-cb",
                            "_blank"
                         )
                      }
+                     whileHover={{ scale: 1.05 }}
+                     whileTap={{ scale: 0.96 }}
                      className="
     inline-flex
     h-[50px]
@@ -81,9 +104,6 @@ export default function LandingPage() {
     text-white
     font-regular
     transition-all
-    transform
-    hover:scale-105
-    active:scale-95
   "
                      style={{
                         background:
@@ -92,8 +112,8 @@ export default function LandingPage() {
                      }}
                   >
                      Get Started Free <ArrowRight size={18} />
-                  </button>
-               </section>
+                  </motion.button>
+               </motion.section>
 
                {/* SUB-HERO (1-line clarity) */}
                <section className="w-full border-y border-[#1e1e1e] bg-[#0f0f0f]/50 backdrop-blur-sm">
@@ -113,24 +133,42 @@ export default function LandingPage() {
                      </p>
                   </div>
                   <div className="grid md:grid-cols-3 gap-8 text-center">
-                     <div className="p-6 rounded-2xl bg-[#0B0B0B] border border-[#1e1e1e] hover:border-[#333] transition-colors">
+                     <motion.div
+                        className="p-6 rounded-2xl bg-[#0B0B0B] border border-[#1e1e1e] hover:border-[#333] transition-colors"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.5 }}
+                        transition={{ duration: 0.5 }}
+                     >
                         <div className="relative w-48 h-32 mx-auto mb-2">
                            <Image src={img1} alt="No bookmarks" fill className="object-contain" />
                         </div>
                         <h3 className="text-[#999] font-medium mb-2">No messy bookmarks</h3>
-                     </div>
-                     <div className="p-6 rounded-2xl bg-[#0B0B0B] border border-[#1e1e1e] hover:border-[#333] transition-colors">
+                     </motion.div>
+                     <motion.div
+                        className="p-6 rounded-2xl bg-[#0B0B0B] border border-[#1e1e1e] hover:border-[#333] transition-colors"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.5 }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                     >
                         <div className="relative w-48 h-32 mx-auto mb-2">
                            <Image src={img2} alt="No lost solutions" fill className="object-contain" />
                         </div>
                         <h3 className="text-[#999] font-medium mb-2">No lost solutions</h3>
-                     </div>
-                     <div className="p-6 rounded-2xl bg-[#0B0B0B] border border-[#1e1e1e] hover:border-[#333] transition-colors">
+                     </motion.div>
+                     <motion.div
+                        className="p-6 rounded-2xl bg-[#0B0B0B] border border-[#1e1e1e] hover:border-[#333] transition-colors"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.5 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                     >
                         <div className="relative w-48 h-32 mx-auto mb-2">
                            <Image src={img3} alt="No manual sorting" fill className="object-contain" />
                         </div>
                         <h3 className="text-[#999] font-medium mb-2">No manual sorting</h3>
-                     </div>
+                     </motion.div>
                   </div>
 
                </section>
@@ -140,7 +178,13 @@ export default function LandingPage() {
                   <div className="max-w-4xl mx-auto px-6 py-24">
                      <h2 className="text-3xl font-bold text-white text-center mb-16">How it works</h2>
 
-                     <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+                     <motion.div
+                        className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12"
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.4 }}
+                        transition={{ duration: 0.6 }}
+                     >
                         {/* Step 1 */}
                         <div className="flex flex-col items-center gap-4 text-center">
                            <div className="w-12 h-12 rounded-full bg-[#1e1e1e] flex items-center justify-center text-white font-bold border border-[#333] text-xl">1</div>
@@ -164,7 +208,7 @@ export default function LandingPage() {
                            <div className="w-12 h-12 rounded-full bg-[#1e1e1e] flex items-center justify-center text-white font-bold border border-[#333] text-xl">3</div>
                            <p className="text-[#ccc] font-medium">Search and Use<br /><span className="text-[#666] text-sm font-normal">it later instantly</span></p>
                         </div>
-                     </div>
+                     </motion.div>
 
                      <p className="text-center text-[#666] mt-12 text-sm uppercase tracking-widest font-medium">That’s it.</p>
                   </div>
@@ -178,45 +222,80 @@ export default function LandingPage() {
                   </div>
 
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                     <div className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group">
+                     <motion.div
+                        className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group"
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.4 }}
+                        transition={{ duration: 0.5 }}
+                        whileHover={{ y: -4 }}
+                     >
                         <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#15B19A] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
                            <Globe size={24} />
                         </div>
                         <h3 className="text-xl font-bold text-white mb-3">One-Click Save</h3>
                         <p className="text-[#888] leading-relaxed">Save code or text directly from any webpage.</p>
-                     </div>
+                     </motion.div>
 
-                     <div className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group">
+                     <motion.div
+                        className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group"
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.4 }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                        whileHover={{ y: -4 }}
+                     >
                         <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#15B19A] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
                            <Database size={24} />
                         </div>
                         <h3 className="text-xl font-bold text-white mb-3">AI Auto-Organizes</h3>
                         <p className="text-[#888] leading-relaxed">Snippet adds titles, tags, and language for you.</p>
-                     </div>
+                     </motion.div>
 
-                     <div className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group">
+                     <motion.div
+                        className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group"
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.4 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        whileHover={{ y: -4 }}
+                     >
                         <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#15B19A] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
                            <Code size={24} />
                         </div>
                         <h3 className="text-xl font-bold text-white mb-3">Clean Code Formatting</h3>
                         <p className="text-[#888] leading-relaxed">Code looks clean and readable with syntax highlighting.</p>
-                     </div>
+                     </motion.div>
 
-                     <div className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group">
+                     <motion.div
+                        className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group"
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.4 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                        whileHover={{ y: -4 }}
+                     >
                         <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#15B19A] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
                            <Zap size={24} />
                         </div>
                         <h3 className="text-xl font-bold text-white mb-3">Cloud Sync</h3>
                         <p className="text-[#888] leading-relaxed">Your snippets are saved online. Access them anytime.</p>
-                     </div>
+                     </motion.div>
 
-                     <div className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group lg:col-span-2">
+                     <motion.div
+                        className="p-8 rounded-3xl bg-[#141414] border border-[#1e1e1e] hover:border-[#333] transition-all group lg:col-span-2"
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.4 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                        whileHover={{ y: -4 }}
+                     >
                         <div className="mb-6 inline-flex p-3 rounded-xl bg-[#1e1e1e] text-[#15B19A] group-hover:text-white group-hover:bg-[#2a2a2a] transition-colors">
                            <Moon size={24} />
                         </div>
                         <h3 className="text-xl font-bold text-white mb-3">Dark Mode UI</h3>
                         <p className="text-[#888] leading-relaxed">Simple, distraction-free design for developers.</p>
-                     </div>
+                     </motion.div>
                   </div>
                </section>
 
@@ -306,18 +385,26 @@ export default function LandingPage() {
 
                {/* FINAL CTA (Clear & direct) */}
                <div className="w-full border-t border-[#1e1e1e]" />
-               <section className="w-full py-32 px-6 text-center">
+               <motion.section
+                  className="w-full py-32 px-6 text-center"
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  transition={{ duration: 0.6 }}
+               >
                   <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 tracking-tight">Turn the web into<br />your personal code notebook.</h2>
                   <p className="text-xl text-[#888] mb-12">Save once. Find forever.</p>
 
                   <div className="flex flex-col items-center gap-6">
-                     <button
+                     <motion.button
                         onClick={() =>
                            window.open(
                               "https://chromewebstore.google.com/detail/eiocbpfklgmgmmnhgcklcpbnmedjmkjh?utm_source=item-share-cb",
                               "_blank"
                            )
                         }
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.96 }}
                         className="
     inline-flex
     h-[50px]
@@ -331,9 +418,6 @@ export default function LandingPage() {
     text-white
     font-regular
     transition-all
-    transform
-    hover:scale-105
-    active:scale-95
   "
                         style={{
                            background:
@@ -342,10 +426,10 @@ export default function LandingPage() {
                         }}
                      >
                         Install Snippet <ArrowRight size={18} />
-                     </button>
+                     </motion.button>
                      <p className="text-sm text-[#555]">Free forever for individual developers.</p>
                   </div>
-               </section>
+               </motion.section>
 
             </main>
 
