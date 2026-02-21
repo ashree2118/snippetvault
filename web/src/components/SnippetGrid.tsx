@@ -10,6 +10,14 @@ import { Maximize2, Minimize2 } from 'lucide-react';
 export default function SnippetGrid({ initialData }: { initialData: any[] }) {
   const { setSnippets, setSearchQuery, filteredSnippets } = useSnippetStore();
   const snippets = filteredSnippets();
+  const [searchInput, setSearchInput] = useState('');
+
+  useEffect(() => {
+  const handler = setTimeout(() => {
+    setSearchQuery(searchInput);
+  }, 300);
+  return () => clearTimeout(handler);
+}, [searchInput, setSearchQuery]);
 
   useEffect(() => {
     setSnippets(initialData);
@@ -25,7 +33,8 @@ export default function SnippetGrid({ initialData }: { initialData: any[] }) {
             type="text"
             placeholder="Search for 'hydration error'"
             className="w-full bg-[#111111] border border-[#1a1a1a] rounded-xl pl-11 pr-4 py-3 text-[13px] text-[#ccc] placeholder-[#444] focus:outline-none focus:border-[#2a2a2a] transition-colors"
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
         </div>
       </div>
