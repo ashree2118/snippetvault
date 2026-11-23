@@ -1,10 +1,26 @@
+importScripts('auth.js');
+
+// Keep the stored token in sync whenever the user signs in on the website.
+// Cookie removals are ignored on purpose: the browser can drop the cookie
+// (expiry, clearing) while the server-side session is still valid. If the
+// session really is gone, the next request gets a 401 and the token is cleared.
+chrome.cookies.onChanged.addListener(({ cookie, removed }) => {
+  if (!removed && isSessionCookie(cookie) && cookie.value) {
+    setStoredToken(cookie.value);
+  }
+});
+
 // 1. Create the Context Menu Item when extension installs
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener(async () => {
   chrome.contextMenus.create({
     id: "save-snippet",
     title: "Save to Snippet",
     contexts: ["selection"]
   });
+
+  // Pick up an existing website login right away.
+  const token = await readSessionCookie();
+  if (token) await setStoredToken(token);
 });
 
 // 2. Listen for the Click
@@ -97,7 +113,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 
     try {
       // 3. Send to your Next.js Backend
-      const response = await fetch('https://saveto-snippet.vercel.app/api/snippet', {
+      const response = await authFetch('/api/snippet', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

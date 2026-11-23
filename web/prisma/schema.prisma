@@ -26,6 +26,7 @@ model User {
   email         String    @unique
   emailVerified Boolean?
   image         String?
+  emailOptOut   Boolean   @default(false) // unsubscribed from update emails
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
